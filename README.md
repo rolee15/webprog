@@ -1,2 +1,0 @@
-# webprog
-ELTE Webprogramozás

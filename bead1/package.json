@@ -1,0 +1,23 @@
+{
+  "name": "boop-game",
+  "version": "1.0.0",
+  "description": "A two-player tabletop game involving kittens",
+  "main": "index.js",
+  "type": "module",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "node --experimental-vm-modules node_modules/.bin/jest"
+  },
+  "keywords": [
+    "boop",
+    "tabletop",
+    "twoplayers"
+  ],
+  "author": "Roland Papdi <parraai@inf.elte.hu>",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^29.5.0"
+  }
+}

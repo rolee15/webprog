@@ -30,10 +30,10 @@ function gameLoop(event) {
     return;
   }
 
+  gameMove(row, col);
+
   if (winCondition()) {
     displayWinner();
-  } else {
-    gameMove(row, col);
   }
 
   render();

@@ -1,4 +1,4 @@
-import GameLogic from "../GameLogic.js";
+import GameLogic from "../src/GameLogic.js";
 
 test("should create a board with given board size", () => {
   const size = 6;

@@ -77,24 +77,24 @@ describe("the game", () => {
   });
 
   it("should have one less kitten after placing one", () => {
-    game.placeWhite();
+    game.placeWhite(1,1);
     expect(game.whiteKittens).toBe(kittenLives-1);
 
-    game.placeBlack();
+    game.placeBlack(4,4);
     expect(game.blackKittens).toBe(kittenLives-1);
   });
 
   it("should end after white player places all their kittens", () => {
-    game.placeWhite();
-    game.placeWhite();
-    game.placeWhite();
+    game.placeWhite(1,1);
+    game.placeWhite(1,2);
+    game.placeWhite(1,3);
     expect(game.winCondition()).toBe(true);
   });
 
   it("should end after black player places all their kittens", () => {
-    game.placeBlack();
-    game.placeBlack();
-    game.placeBlack();
+    game.placeBlack(1,1);
+    game.placeBlack(1,2);
+    game.placeBlack(1,3);
     expect(game.winCondition()).toBe(true);
   });
 });

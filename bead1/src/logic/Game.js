@@ -74,22 +74,23 @@ class Game {
     return !this.board[i][j];
   }
 
-  placeWhite() {
-    if (this.whiteKittens > 0) this.whiteKittens--;
+  placeWhite(row, col) {
+    if (this.whiteKittens > 0) {
+      this.set(row, col, "W");
+      this.whiteKittens--;
+    }
   }
 
-  placeBlack() {
-    if (this.blackKittens > 0) this.blackKittens--;
+  placeBlack(row, col) {
+    if (this.blackKittens > 0) {
+      this.set(row, col, "B");
+      this.blackKittens--;
+    }
   }
 
   gameMove(row, col) {
-    if (
-      this.isCellFree(row, col) &&
-      ((this.isWhite && this.whiteKittens > 0) ||
-        (!this.isWhite && this.blackKittens > 0))
-    ) {
-      this.set(row, col, this.isWhite ? "W" : "B");
-      this.isWhite ? this.placeWhite() : this.placeBlack();
+    if (this.isCellFree(row, col)) {
+      this.isWhite ? this.placeWhite(row, col) : this.placeBlack(row, col);
       this.isWhite = !this.isWhite;
     }
   }

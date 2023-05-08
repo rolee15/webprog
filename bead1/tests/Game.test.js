@@ -8,6 +8,7 @@ beforeEach(() => {
   boardSize = 6;
   kittenLives = 3;
   game = new Game(boardSize, kittenLives);
+  game.reset();
 });
 
 describe("the board", () => {
@@ -65,6 +66,14 @@ describe("the game", () => {
   it("should have the set number of kittens for each player", () => {
     expect(game.whiteKittens).toBe(kittenLives);
     expect(game.blackKittens).toBe(kittenLives);
+  });
+
+  it("should not be able to place a kitten on an occupied cell", () => {
+    game.gameMove(1, 1);
+    game.gameMove(1, 1);
+    expect(game.whiteKittens).toBe(kittenLives - 1);
+    expect(game.blackKittens).toBe(kittenLives);
+    expect(game.get(1, 1)).toBe("W");
   });
 
   it("should have one less kitten after placing one", () => {

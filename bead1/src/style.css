@@ -1,15 +1,32 @@
 canvas {
-	display: block;
-	margin: 0 auto;
+  display: block;
+  margin: 0 auto;
 }
 
 #resultPanel {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	height: 50px;
-	font-size: 24px;
-	font-weight: bold;
-	margin-top: 20px;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 20px;
+}
 
+#scoresPanel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+#whiteScore {
+  margin-right: 105px;
+}
+
+#blackScore {
+  margin-left: 105px;
+}

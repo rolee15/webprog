@@ -112,10 +112,13 @@ describe("the game", () => {
 
   it("should end and white win after white player reaching 5 points", () => {
     game.whitePts = 4;
-    game.placeWhite(1, 1);
-    game.placeWhite(1, 2);
-    game.placeWhite(1, 3);
-    game.placeWhite(1, 4);
+    game.place(1, 1);
+    game.place(3, 3);
+    game.place(1, 2);
+    game.place(3, 4);
+    game.place(1, 3);
+    game.place(3, 5);
+    game.place(1, 4);
 
     expect(game.winCondition()).toBe(true);
     expect(game.winner).toBe("White");
@@ -123,10 +126,14 @@ describe("the game", () => {
 
   it("should end and black win after black player reaching 5 points", () => {
     game.blackPts = 4;
-    game.placeBlack(1, 1);
-    game.placeBlack(1, 2);
-    game.placeBlack(1, 3);
-    game.placeBlack(1, 4);
+    game.place(5, 5);
+    game.place(1, 1);
+    game.place(5, 4);
+    game.place(1, 2);
+    game.place(4, 5);
+    game.place(1, 3);
+    game.place(3, 5);
+    game.place(1, 4);
 
     expect(game.winCondition()).toBe(true);
     expect(game.winner).toBe("Black");
@@ -272,10 +279,13 @@ describe("a kitten", () => {
   });
 
   it("and it's two neighbours should be placed back on the bench if three of them are in line in a row", () => {
-    game.placeWhite(1,1);
-    game.placeWhite(1,2);
-    game.placeWhite(1,3);
-    game.placeWhite(1,4);
+    game.place(1, 1);
+    game.place(5, 5);
+    game.place(1, 2);
+    game.place(5, 4);
+    game.place(1, 3);
+    game.place(4, 5);
+    game.place(1, 4);
 
     expect(game.get(1, 0)).toBeNull();
     expect(game.get(1, 1)).toBeNull();
@@ -285,10 +295,13 @@ describe("a kitten", () => {
   });
 
   it("and it's two neighbours should be placed back on the bench if three of them are in line in a column", () => {
-    game.placeWhite(1,1);
-    game.placeWhite(2,1);
-    game.placeWhite(3,1);
-    game.placeWhite(4,1);
+    game.place(1, 1);
+    game.place(0, 5);
+    game.place(2, 1);
+    game.place(0, 4);
+    game.place(3, 1);
+    game.place(1, 5);
+    game.place(4, 1);
 
     expect(game.get(0, 1)).toBeNull();
     expect(game.get(1, 1)).toBeNull();
@@ -298,10 +311,13 @@ describe("a kitten", () => {
   });
 
   it("and it's two neighbours should be placed back on the bench if three of them are in line diagonally", () => {
-    game.placeWhite(1,1);
-    game.placeWhite(2,2);
-    game.placeWhite(3,3);
-    game.placeWhite(4,4);
+    game.place(1, 1);
+    game.place(0, 5);
+    game.place(2, 2);
+    game.place(0, 4);
+    game.place(3, 3);
+    game.place(1, 5);
+    game.place(4, 4);
 
     expect(game.get(0, 0)).toBeNull();
     expect(game.get(1, 1)).toBeNull();
@@ -311,10 +327,13 @@ describe("a kitten", () => {
   });
 
   it("and it's two neighbours should be placed back on the bench if three of them are in line anti-diagonally", () => {
-    game.placeWhite(1,4);
-    game.placeWhite(2,3);
-    game.placeWhite(3,2);
-    game.placeWhite(4,1);
+    game.place(1, 4);
+    game.place(0, 0);
+    game.place(2, 3);
+    game.place(1, 1);
+    game.place(3, 2);
+    game.place(0, 1);
+    game.place(4, 1);
 
     expect(game.get(0, 5)).toBeNull();
     expect(game.get(1, 4)).toBeNull();
@@ -326,10 +345,13 @@ describe("a kitten", () => {
 
 describe("the score", () => {
   it("should increase when three kittens with the same color are in line", () => {
-    game.placeWhite(1,1);
-    game.placeWhite(1,2);
-    game.placeWhite(1,3);
-    game.placeWhite(1,4);
+    game.place(1, 1);
+    game.place(3, 3);
+    game.place(1, 2);
+    game.place(3, 4);
+    game.place(1, 3);
+    game.place(3, 5);
+    game.place(1, 4);
 
     expect(game.whitePts).toBe(1);
   });

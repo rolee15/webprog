@@ -12,7 +12,6 @@ class Game {
 
     if (kittenLives < 3)
       throw new Error("Players must have at least 3 kittens!");
-
     this.kittenLives = kittenLives;
     this.whiteKittens = kittenLives;
     this.blackKittens = kittenLives;
@@ -98,6 +97,16 @@ class Game {
     this.unset(iCurr, jCurr);
   }
 
+  remove(i, j) {
+    const value = this.get(i, j);
+    if (!value)
+      throw new Error("Cannot remove kitten from cell: " + i + ", " + j);
+
+    this.unset(i, j);
+    if (value === "W") this.whiteKittens++;
+    if (value === "B") this.blackKittens++;
+  }
+
   isCellOccupied(i, j) {
     if (i < 0 || i >= this.boardSize)
       throw new Error("Parameter is out of bounds: " + i);
@@ -180,33 +189,75 @@ class Game {
   }
 
   winCondition() {
-    if (this.whiteKittens === 0) {
-      this.winner = "Black";
-      this.isGameWon = true;
-    } else if (this.blackKittens === 0) {
+    if (this.didWhiteWin()) {
       this.winner = "White";
+      this.isGameWon = true;
+    } else if (this.didBlackWin()) {
+      this.winner = "Black";
       this.isGameWon = true;
     }
 
     return this.isGameWon;
   }
 
+  didWhiteWin() {
+    return this.blackKittens === 0 || this.whitePts === 5;
+  }
+
+  didBlackWin() {
+    return this.whiteKittens === 0 || this.blackPts === 5;
+  }
+
   checkThrees() {
+    this.checkRows();
+    this.checkColumns();
+    this.checkDiagonals();
+    this.checkAntiDiagonals();
+  }
+
+  checkRows() {
     for (let i = 0; i < this.boardSize; i++) {
       for (let j = 2; j < this.boardSize; j++) {
-        if (
-          this.get(i, j - 2) === "W" &&
-          this.get(i, j - 1) === "W" &&
-          this.get(i, j) === "W"
-        ) {
-        }
+        this.checkAndRemove(i, j - 2, i, j - 1, i, j);
       }
     }
+  }
 
+  checkColumns() {
     for (let j = 0; j < this.boardSize; j++) {
       for (let i = 2; i < this.boardSize; i++) {
-        // check columns
+        this.checkAndRemove(i - 2, j, i - 1, j, i, j);
       }
+    }
+  }
+
+  checkDiagonals() {
+    for (let i = 2; i <= 5; i++) {
+      for (let j = 2; j <= 5; j++) {
+        this.checkAndRemove(i - 2, j - 2, i - 1, j - 1, i, j);
+      }
+    }
+  }
+
+  checkAntiDiagonals() {
+    for (let i = 2; i <= 5; i++) {
+      for (let j = 0; j <= 3; j++) {
+        this.checkAndRemove(i - 2, j + 2, i - 1, j + 1, i, j);
+      }
+    }
+  }
+
+  checkAndRemove(i1, j1, i2, j2, i3, j3) {
+    const color = this.get(i1, j1);
+    if (!color) return;
+
+    if (this.get(i2, j2) === color && this.get(i3, j3) === color) {
+      this.remove(i1, j1);
+      this.remove(i2, j2);
+      this.remove(i3, j3);
+
+      if (color === "W") this.whitePts++;
+      if (color === "B") this.blackPts++;
     }
   }
 }

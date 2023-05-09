@@ -5,6 +5,8 @@ import KittensLeft from "./graphics/KittensLeft.js";
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 const resultPanel = document.getElementById("resultPanel");
+const whiteScore = document.getElementById("whiteScore");
+const blackScore = document.getElementById("blackScore");
 
 const CELL_SIZE = 80;
 const BOARD_SIZE = 6;
@@ -39,6 +41,7 @@ class App {
     this.game.place(row, col);
     if (this.game.winCondition()) this.displayWinner();
 
+    this.displayPoints();
     this.render();
   }
 
@@ -46,9 +49,16 @@ class App {
     resultPanel.innerHTML = `<h1>${this.game.winner} wins!</h1>`;
   }
 
+  displayPoints() {
+    whiteScore.innerHTML = `White: ${this.game.whitePts}`;
+    blackScore.innerHTML = `Black: ${this.game.blackPts}`;
+  }
+
   newGame() {
     this.game.reset();
     resultPanel.innerHTML = "";
+    whiteScore.innerHTML = `White: 0`;
+    blackScore.innerHTML = `Black: 0`;
     this.render();
   }
 
@@ -62,7 +72,8 @@ class App {
     this.objects.push(
       new KittensLeft(
         this.game.getWhiteKittensLeft(),
-        this.game.getBlackKittensLeft()
+        this.game.getBlackKittensLeft(),
+        this.game.isWhite
       )
     );
 

@@ -1,15 +1,17 @@
 import Renderable from "../interface/Renderable.js";
 
 class KittensLeft extends Renderable {
-  constructor(whiteKittens, blackKittens) {
+  constructor(whiteKittens, blackKittens, isWhite) {
     super();
     this.whiteKittens = whiteKittens;
     this.blackKittens = blackKittens;
+    this.isWhite = isWhite;
   }
 
   render(ctx) {
     this.drawWhiteKittens(ctx);
     this.drawBlackKittens(ctx);
+    this.drawCurrentPlayerIndicator(ctx);
   }
 
   drawBlackKittens(ctx) {
@@ -39,6 +41,22 @@ class KittensLeft extends Renderable {
       ctx.stroke();
       ctx.closePath();
     }
+  }
+
+  drawCurrentPlayerIndicator(ctx) {
+    const img = new Image();
+    img.src = this.isWhite
+      ? "../resources/white_kitten.jpg"
+      : "../resources/black_kitten.jpg";
+    img.onload = () => {
+      ctx.drawImage(
+        img,
+        ctx.canvas.width / 2 - 20,
+        (ctx.canvas.height - 60) + 20,
+        40,
+        40
+      );
+    };
   }
 }
 

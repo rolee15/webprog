@@ -6,7 +6,7 @@ let kittenLives;
 
 beforeEach(() => {
   boardSize = 6;
-  kittenLives = 3;
+  kittenLives = 8;
   game = new Game(boardSize, kittenLives);
   game.reset();
 });
@@ -16,6 +16,7 @@ describe("the board", () => {
     it("should throw exception if board size too small", () => {
       expect(() => new Game(0)).toThrow(Error);
       expect(() => new Game(1)).toThrow(Error);
+      expect(() => new Game(2)).toThrow(Error);
       expect(() => new Game(-1)).toThrow(Error);
     });
 
@@ -53,11 +54,15 @@ describe("the board", () => {
     });
 
     it("should return value if trying to get inside bounds", () => {
-      expect(game.set(0, 1, "W")).toBe("W");
+      game.set(0, 1, "W");
       expect(game.get(0, 1)).toBe("W");
 
-      expect(game.set(4, 4, "B")).toBe("B");
+      game.set(4, 4, "B");
       expect(game.get(4, 4)).toBe("B");
+
+      game.set(2, 2, "B");
+      game.unset(2, 2);
+      expect(game.get(2, 2)).toBeNull();
     });
   });
 });
@@ -69,32 +74,263 @@ describe("the game", () => {
   });
 
   it("should not be able to place a kitten on an occupied cell", () => {
-    game.gameMove(1, 1);
-    game.gameMove(1, 1);
+    game.place(1, 1);
+    game.place(1, 1);
+
     expect(game.whiteKittens).toBe(kittenLives - 1);
     expect(game.blackKittens).toBe(kittenLives);
     expect(game.get(1, 1)).toBe("W");
   });
 
   it("should have one less kitten after placing one", () => {
-    game.placeWhite(1,1);
-    expect(game.whiteKittens).toBe(kittenLives-1);
+    game.placeWhite(1, 1);
+    expect(game.whiteKittens).toBe(kittenLives - 1);
 
-    game.placeBlack(4,4);
-    expect(game.blackKittens).toBe(kittenLives-1);
+    game.placeBlack(4, 4);
+    expect(game.blackKittens).toBe(kittenLives - 1);
   });
 
-  it("should end after white player places all their kittens", () => {
+  it("should end and black win after white player places all their kittens", () => {
+    game.whiteKittens = 3;
+    game.placeWhite(1, 1);
+    game.placeWhite(1, 2);
+    game.placeWhite(1, 3);
+
+    expect(game.winCondition()).toBe(true);
+    expect(game.winner).toBe("Black");
+  });
+
+  it("should end and white win after black player places all their kittens", () => {
+    game.blackKittens = 3;
+    game.placeBlack(1, 1);
+    game.placeBlack(1, 2);
+    game.placeBlack(1, 3);
+
+    expect(game.winCondition()).toBe(true);
+    expect(game.winner).toBe("White");
+  });
+
+  it("should end and white win after white player reaching 5 points", () => {
+    game.whitePts = 4;
+    game.placeWhite(1, 1);
+    game.placeWhite(1, 2);
+    game.placeWhite(1, 3);
+    game.placeWhite(1, 4);
+
+    expect(game.winCondition()).toBe(true);
+    expect(game.winner).toBe("White");
+  });
+
+  it("should end and black win after black player reaching 5 points", () => {
+    game.blackPts = 4;
+    game.placeBlack(1, 1);
+    game.placeBlack(1, 2);
+    game.placeBlack(1, 3);
+    game.placeBlack(1, 4);
+
+    expect(game.winCondition()).toBe(true);
+    expect(game.winner).toBe("Black");
+  });
+});
+
+describe("a kitten", () => {
+  it("should boop a neighbour to up and left one cell when it is a free space", () => {
+    game.placeWhite(1, 1);
+    game.placeBlack(2, 2);
+
+    expect(game.get(2, 2)).toBe("B");
+    expect(game.get(1, 1)).toBeNull();
+    expect(game.get(0, 0)).toBe("W");
+  });
+
+  it("should boop a neighbour to up one cell when it is a free space", () => {
+    game.placeWhite(1, 2);
+    game.placeBlack(2, 2);
+
+    expect(game.get(2, 2)).toBe("B");
+    expect(game.get(1, 2)).toBeNull();
+    expect(game.get(0, 2)).toBe("W");
+  });
+
+  it("should boop a neighbour to up and right one cell when it is a free space", () => {
+    game.placeWhite(1, 3);
+    game.placeBlack(2, 2);
+
+    expect(game.get(2, 2)).toBe("B");
+    expect(game.get(1, 3)).toBeNull();
+    expect(game.get(0, 4)).toBe("W");
+  });
+
+  it("should boop a neighbour to right one cell when it is a free space", () => {
+    game.placeWhite(2, 3);
+    game.placeBlack(2, 2);
+
+    expect(game.get(2, 2)).toBe("B");
+    expect(game.get(2, 3)).toBeNull();
+    expect(game.get(2, 4)).toBe("W");
+  });
+
+  it("should boop a neighbour to down and right one cell when it is a free space", () => {
+    game.placeWhite(3, 3);
+    game.placeBlack(2, 2);
+
+    expect(game.get(2, 2)).toBe("B");
+    expect(game.get(3, 3)).toBeNull();
+    expect(game.get(4, 4)).toBe("W");
+  });
+
+  it("should boop a neighbour to down one cell when it is a free space", () => {
+    game.placeWhite(3, 2);
+    game.placeBlack(2, 2);
+
+    expect(game.get(2, 2)).toBe("B");
+    expect(game.get(3, 2)).toBeNull();
+    expect(game.get(4, 2)).toBe("W");
+  });
+
+  it("should boop a neighbour to down and left one cell when it is a free space", () => {
+    game.placeWhite(3, 1);
+    game.placeBlack(2, 2);
+
+    expect(game.get(2, 2)).toBe("B");
+    expect(game.get(3, 1)).toBeNull();
+    expect(game.get(4, 0)).toBe("W");
+  });
+
+  it("should boop a neighbour to left one cell when it is a free space", () => {
+    game.placeWhite(2, 1);
+    game.placeBlack(2, 2);
+
+    expect(game.get(2, 2)).toBe("B");
+    expect(game.get(2, 1)).toBeNull();
+    expect(game.get(2, 0)).toBe("W");
+  });
+
+  it("should boop a neighbour from the board when it is in the corner", () => {
+    game.placeWhite(0, 0);
+    game.placeBlack(1, 1);
+    expect(game.get(1, 1)).toBe("B");
+    expect(game.get(0, 0)).toBeNull();
+    expect(game.whiteKittens).toBe(game.kittenLives);
+
+    game.placeWhite(0, 5);
+    game.placeBlack(1, 4);
+    expect(game.get(1, 4)).toBe("B");
+    expect(game.get(0, 5)).toBeNull();
+    expect(game.whiteKittens).toBe(game.kittenLives);
+
+    game.placeWhite(5, 0);
+    game.placeBlack(4, 1);
+    expect(game.get(4, 1)).toBe("B");
+    expect(game.get(5, 0)).toBeNull();
+    expect(game.whiteKittens).toBe(game.kittenLives);
+
+    game.placeWhite(5, 5);
+    game.placeBlack(4, 4);
+    expect(game.get(4, 4)).toBe("B");
+    expect(game.get(5, 5)).toBeNull();
+    expect(game.whiteKittens).toBe(game.kittenLives);
+  });
+
+  it("should boop a neighbour from the board when it is next to the edge but not in the corner", () => {
+    game.placeWhite(0, 1);
+    game.placeBlack(1, 1);
+    expect(game.get(1, 1)).toBe("B");
+    expect(game.get(0, 1)).toBeNull();
+    expect(game.whiteKittens).toBe(game.kittenLives);
+
+    game.placeWhite(1, 5);
+    game.placeBlack(1, 4);
+    expect(game.get(1, 4)).toBe("B");
+    expect(game.get(1, 5)).toBeNull();
+    expect(game.whiteKittens).toBe(game.kittenLives);
+
+    game.placeWhite(5, 4);
+    game.placeBlack(4, 4);
+    expect(game.get(4, 4)).toBe("B");
+    expect(game.get(5, 4)).toBeNull();
+    expect(game.whiteKittens).toBe(game.kittenLives);
+
+    game.placeWhite(4, 0);
+    game.placeBlack(4, 1);
+    expect(game.get(4, 1)).toBe("B");
+    expect(game.get(4, 0)).toBeNull();
+    expect(game.whiteKittens).toBe(game.kittenLives);
+  });
+
+  it("should not boop a neighbour when the other side of the neighbor is occupied", () => {
+    game.placeWhite(1, 1);
+    game.placeBlack(1, 3);
+    game.placeWhite(1, 4);
+    game.placeBlack(1, 3);
+
+    expect(game.get(1, 1)).toBe("W");
+    expect(game.get(1, 2)).toBe("B");
+    expect(game.get(1, 3)).toBe("B");
+    expect(game.get(1, 4)).toBeNull();
+    expect(game.get(1, 5)).toBe("W");
+  });
+
+  it("and it's two neighbours should be placed back on the bench if three of them are in line in a row", () => {
     game.placeWhite(1,1);
     game.placeWhite(1,2);
     game.placeWhite(1,3);
-    expect(game.winCondition()).toBe(true);
+    game.placeWhite(1,4);
+
+    expect(game.get(1, 0)).toBeNull();
+    expect(game.get(1, 1)).toBeNull();
+    expect(game.get(1, 2)).toBeNull();
+    expect(game.get(1, 3)).toBeNull();
+    expect(game.get(1, 4)).toBe("W");
   });
 
-  it("should end after black player places all their kittens", () => {
-    game.placeBlack(1,1);
-    game.placeBlack(1,2);
-    game.placeBlack(1,3);
-    expect(game.winCondition()).toBe(true);
+  it("and it's two neighbours should be placed back on the bench if three of them are in line in a column", () => {
+    game.placeWhite(1,1);
+    game.placeWhite(2,1);
+    game.placeWhite(3,1);
+    game.placeWhite(4,1);
+
+    expect(game.get(0, 1)).toBeNull();
+    expect(game.get(1, 1)).toBeNull();
+    expect(game.get(2, 1)).toBeNull();
+    expect(game.get(3, 1)).toBeNull();
+    expect(game.get(4, 1)).toBe("W");
+  });
+
+  it("and it's two neighbours should be placed back on the bench if three of them are in line diagonally", () => {
+    game.placeWhite(1,1);
+    game.placeWhite(2,2);
+    game.placeWhite(3,3);
+    game.placeWhite(4,4);
+
+    expect(game.get(0, 0)).toBeNull();
+    expect(game.get(1, 1)).toBeNull();
+    expect(game.get(2, 2)).toBeNull();
+    expect(game.get(3, 3)).toBeNull();
+    expect(game.get(4, 4)).toBe("W");
+  });
+
+  it("and it's two neighbours should be placed back on the bench if three of them are in line anti-diagonally", () => {
+    game.placeWhite(1,4);
+    game.placeWhite(2,3);
+    game.placeWhite(3,2);
+    game.placeWhite(4,1);
+
+    expect(game.get(0, 5)).toBeNull();
+    expect(game.get(1, 4)).toBeNull();
+    expect(game.get(2, 3)).toBeNull();
+    expect(game.get(3, 2)).toBeNull();
+    expect(game.get(4, 1)).toBe("W");
+  });
+});
+
+describe("the score", () => {
+  it("should increase when three kittens with the same color are in line", () => {
+    game.placeWhite(1,1);
+    game.placeWhite(1,2);
+    game.placeWhite(1,3);
+    game.placeWhite(1,4);
+
+    expect(game.whitePts).toBe(1);
   });
 });

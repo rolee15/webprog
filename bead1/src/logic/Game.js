@@ -2,14 +2,17 @@ class Game {
   isGameWon;
   isWhite;
   winner;
+  whitePts;
+  blackPts;
 
   constructor(boardSize, kittenLives) {
-    if (boardSize < 2) throw new Error("Board must be at least 2x2!");
+    if (boardSize < 3) throw new Error("Board must be at least 3x3!");
     this.boardSize = boardSize;
     this.clearBoard();
 
     if (kittenLives < 3)
       throw new Error("Players must have at least 3 kittens!");
+
     this.kittenLives = kittenLives;
     this.whiteKittens = kittenLives;
     this.blackKittens = kittenLives;
@@ -18,6 +21,7 @@ class Game {
   reset() {
     this.clearBoard();
     this.restoreKittens();
+    this.resetPoints();
     this.isGameWon = false;
     this.isWhite = true;
     this.winner = "Nobody";
@@ -33,16 +37,22 @@ class Game {
     }
   }
 
-  winCondition() {
-    if (this.whiteKittens === 0) {
-      this.winner = "Black";
-      this.isGameWon = true;
-    } else if (this.blackKittens === 0) {
-      this.winner = "White";
-      this.isGameWon = true;
-    }
+  restoreKittens() {
+    this.whiteKittens = this.kittenLives;
+    this.blackKittens = this.kittenLives;
+  }
 
-    return this.isGameWon;
+  resetPoints() {
+    this.whitePts = 0;
+    this.blackPts = 0;
+  }
+
+  getWhiteKittensLeft() {
+    return this.whiteKittens;
+  }
+
+  getBlackKittensLeft() {
+    return this.blackKittens;
   }
 
   get(i, j) {
@@ -62,22 +72,59 @@ class Game {
     if (value !== "W" && value !== "B")
       throw new Error("Invalid value given: " + value);
 
-    return (this.board[i][j] = value);
+    this.board[i][j] = value;
   }
 
-  isCellFree(i, j) {
+  unset(i, j) {
     if (i < 0 || i >= this.boardSize)
       throw new Error("Parameter is out of bounds: " + i);
     if (j < 0 || j >= this.boardSize)
       throw new Error("Parameter is out of bounds: " + j);
 
-    return !this.board[i][j];
+    this.board[i][j] = null;
+  }
+
+  move(iNew, jNew, iCurr, jCurr) {
+    if (iCurr < 0 || iCurr >= this.boardSize)
+      throw new Error("Parameter is out of bounds: " + iCurr);
+    if (jCurr < 0 || jCurr >= this.boardSize)
+      throw new Error("Parameter is out of bounds: " + jCurr);
+    if (iNew < 0 || iNew >= this.boardSize)
+      throw new Error("Parameter is out of bounds: " + iNew);
+    if (jNew < 0 || jNew >= this.boardSize)
+      throw new Error("Parameter is out of bounds: " + jNew);
+
+    this.set(iNew, jNew, this.get(iCurr, jCurr));
+    this.unset(iCurr, jCurr);
+  }
+
+  isCellOccupied(i, j) {
+    if (i < 0 || i >= this.boardSize)
+      throw new Error("Parameter is out of bounds: " + i);
+    if (j < 0 || j >= this.boardSize)
+      throw new Error("Parameter is out of bounds: " + j);
+
+    return this.board[i][j] !== null;
+  }
+
+  isCellFree(i, j) {
+    return !this.isCellOccupied(i, j);
+  }
+
+  place(row, col) {
+    if (this.isCellFree(row, col)) {
+      this.isWhite ? this.placeWhite(row, col) : this.placeBlack(row, col);
+      this.isWhite = !this.isWhite;
+      this.checkThrees();
+    }
   }
 
   placeWhite(row, col) {
     if (this.whiteKittens > 0) {
       this.set(row, col, "W");
       this.whiteKittens--;
+
+      this.boopNeighbors(row, col);
     }
   }
 
@@ -85,27 +132,82 @@ class Game {
     if (this.blackKittens > 0) {
       this.set(row, col, "B");
       this.blackKittens--;
+
+      this.boopNeighbors(row, col);
     }
   }
 
-  gameMove(row, col) {
-    if (this.isCellFree(row, col)) {
-      this.isWhite ? this.placeWhite(row, col) : this.placeBlack(row, col);
-      this.isWhite = !this.isWhite;
+  boopNeighbors(row, col) {
+    for (let i = -1; i <= 1; i++) {
+      for (let j = -1; j <= 1; j++) {
+        if (i === 0 && j === 0) continue;
+
+        if (
+          row + i < 0 ||
+          col + j < 0 ||
+          row + i >= this.boardSize ||
+          col + j >= this.boardSize
+        )
+          continue;
+
+        if (this.isCellOccupied(row + i, col + j))
+          this.boop(row + i, col + j, row, col);
+      }
     }
   }
 
-  restoreKittens() {
-    this.whiteKittens = this.kittenLives;
-    this.blackKittens = this.kittenLives;
+  boop(rowNeighbor, colNeighbor, rowSource, colSource) {
+    let moveRow = rowNeighbor - rowSource;
+    let moveCol = colNeighbor - colSource;
+    let newRow = rowNeighbor + moveRow;
+    let newCol = colNeighbor + moveCol;
+
+    let value = this.get(rowNeighbor, colNeighbor);
+
+    if (
+      newRow >= 0 &&
+      newRow < this.boardSize &&
+      newCol >= 0 &&
+      newCol < this.boardSize
+    ) {
+      if (this.isCellFree(newRow, newCol))
+        this.move(newRow, newCol, rowNeighbor, colNeighbor);
+    } else {
+      this.unset(rowNeighbor, colNeighbor);
+      if (value === "W") this.whiteKittens++;
+      if (value === "B") this.blackKittens++;
+    }
   }
 
-  getWhiteKittensLeft() {
-    return this.whiteKittens;
+  winCondition() {
+    if (this.whiteKittens === 0) {
+      this.winner = "Black";
+      this.isGameWon = true;
+    } else if (this.blackKittens === 0) {
+      this.winner = "White";
+      this.isGameWon = true;
+    }
+
+    return this.isGameWon;
   }
 
-  getBlackKittensLeft() {
-    return this.blackKittens;
+  checkThrees() {
+    for (let i = 0; i < this.boardSize; i++) {
+      for (let j = 2; j < this.boardSize; j++) {
+        if (
+          this.get(i, j - 2) === "W" &&
+          this.get(i, j - 1) === "W" &&
+          this.get(i, j) === "W"
+        ) {
+        }
+      }
+    }
+
+    for (let j = 0; j < this.boardSize; j++) {
+      for (let i = 2; i < this.boardSize; i++) {
+        // check columns
+      }
+    }
   }
 }
 

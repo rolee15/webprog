@@ -8,7 +8,7 @@ const resultPanel = document.getElementById("resultPanel");
 
 const CELL_SIZE = 80;
 const BOARD_SIZE = 6;
-const KITTEN_LIVES = 3;
+const KITTEN_LIVES = 8;
 
 class App {
   objects = [];
@@ -36,7 +36,7 @@ class App {
     const { row, col } = this.getClickedCellIndex(event.offsetX, event.offsetY);
     if (row >= this.game.boardSize || col >= this.game.boardSize) return;
 
-    this.game.gameMove(row, col);
+    this.game.place(row, col);
     if (this.game.winCondition()) this.displayWinner();
 
     this.render();
@@ -56,7 +56,9 @@ class App {
     this.clearCanvas();
 
     this.objects = [];
-    this.objects.push(new Board(this.game.board, this.game.boardSize, CELL_SIZE));
+    this.objects.push(
+      new Board(this.game.board, this.game.boardSize, CELL_SIZE)
+    );
     this.objects.push(
       new KittensLeft(
         this.game.getWhiteKittensLeft(),

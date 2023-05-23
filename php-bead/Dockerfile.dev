@@ -1,0 +1,10 @@
+# syntax=docker/dockerfile:1
+FROM php:8.1.19-fpm
+ARG uid=1000
+ARG user=sammy
+
+COPY testHashSpeed.php /app/
+
+WORKDIR /app
+
+CMD [ "php", "./testHashSpeed.php" ]

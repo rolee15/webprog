@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 FROM php:8.1.19-fpm
-ARG uid=1000
+ARG uid=10000
 ARG user=sammy
 
 RUN apt-get update && apt-get install -y \

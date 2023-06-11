@@ -6,7 +6,7 @@ services:
     build:
       args:
         user: sammy
-        uid: 1000
+        uid: 10000
       context: ./
       dockerfile: Dockerfile
     image: winampify

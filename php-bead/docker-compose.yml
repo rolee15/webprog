@@ -2,21 +2,18 @@ version: '3.7'
 
 services:
 
-  # app:
-  #   build:
-  #     args:
-  #       user: sammy
-  #       uid: 10000
-  #     context: ./
-  #     dockerfile: Dockerfile
-  #   image: winampify
-  #   container_name: winampify-app
-  #   restart: unless-stopped
-  #   working_dir: /var/www
-  #   volumes:
-  #     - ./:/var/www
-  #   networks:
-  #     - winampify
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: winampify
+    container_name: winampify-app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+    networks:
+      - winampify
 
   nginx:
     image: nginx:1.23-alpine

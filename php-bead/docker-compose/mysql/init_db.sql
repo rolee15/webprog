@@ -1,32 +1,45 @@
-DROP TABLE IF EXISTS `places`;
-CREATE TABLE `places` (
-    `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-    `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-    `visited` tinyint(1) NOT NULL DEFAULT '0',
-    `lat` float(9, 6) NOT NULL DEFAULT '0.00',
-    `lng` float(9, 6) NOT NULL DEFAULT '0.00',
-    PRIMARY KEY (`id`)
-) ENGINE = InnoDB AUTO_INCREMENT = 12 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
-INSERT INTO `places` (name, visited, lat, lng)
-VALUES ('Berlin', 1, 52.52, 13.405),
-    ('Budapest', 1, 47.4979, 19.0402),
-    ('Cincinnati', 0, 39.1031, -84.512),
-    ('Denver', 0, 39.7392, -104.99),
-    ('Helsinki', 1, 60.1699, 24.9384),
-    ('Lisbon', 1, 38.7223, -9.13934),
-    ('Moscow', 0, 55.7558, 37.6173),
-    ('Nairobi', 0, -1.29207, 36.8219),
-    ('Oslo', 1, 59.9139, 10.7522),
-    ('Rio', 1, -22.9068, -43.1729),
-    ('Tokyo', 0, 35.6895, 139.692);
-
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
-    `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-    `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-    `email` tinyint(1) NOT NULL DEFAULT '0',
-    `password` varchar(255) NOT NULL,
-    `isAdmin` tinyint(1) NOT NULL DEFAULT '0',
-    PRIMARY KEY (`id`)
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `isAdmin` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
 ) ENGINE = InnoDB AUTO_INCREMENT = 12 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
-INSERT INTO `places` (name, visited, lat, lng)
+INSERT INTO `users` (id, name, email, password, isAdmin) VALUES
+  (12, 'John Doe', 'john@example.com', 'password123', 1),
+  (13, 'Jane Smith', 'jane@example.com', 'secret456', 0);
+
+DROP TABLE IF EXISTS `tracks`;
+CREATE TABLE `tracks` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `title` VARCHAR(255) NOT NULL,
+  `artist` VARCHAR(255) NOT NULL,
+  `length` TIME,
+  `year` INT,
+  `genres` JSON,
+  PRIMARY KEY (`id`)
+) ENGINE = InnoDB AUTO_INCREMENT = 12 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+INSERT INTO tracks (id, title, artist, length, year, genres) VALUES
+  (12, 'Bohemian Rhapsody', 'Queen', '05:55', 1975, '["Rock", "Classic", "Progressive"]'),
+  (13, 'Thriller', 'Michael Jackson', '05:57', 1982, '["Pop"]'),
+  (14, 'Hotel California', 'Eagles', '06:30', 1976, '["Rock"]'),
+  (15, 'Hey Jude', 'The Beatles', '07:11', 1968, '["Rock"]'),
+  (16, 'Billie Jean', 'Michael Jackson', '04:54', 1982, '["Pop"]');
+
+DROP TABLE IF EXISTS `playlists`;
+CREATE TABLE playlists (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(255) NOT NULL,
+  `isPublic` BOOLEAN NOT NULL DEFAULT 0,
+  `createdBy` bigint(20) unsigned,
+  `tracks` JSON,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (createdBy) REFERENCES users(id)
+) ENGINE = InnoDB AUTO_INCREMENT = 12 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+INSERT INTO `playlists` (id, name, isPublic, createdBy, tracks) VALUES
+  (12, 'My Favorites', 1, 12, '[12, 14]'),
+  (13, 'Rock Classics', 1, 14, '[13, 15]'),
+  (14, 'Throwback Jams', 0, 12, '[12, 13, 14]');
+

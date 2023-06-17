@@ -1,20 +1,31 @@
 # Running the application
 
-Create a .env environment file from scratch or copy the .env.example and modify that with:
-
+## Step 1 - Creating an environment file
+Create an .env environment file by copying the .env.example:
 ```
 cp .env.example .env
 ```
+Change the values in .env to whatever you want to use.
 
-Once you have Docker and Docker Compose installed, you can get this environment up and running with:
+## Step 2 - Install docker
+If you don't have Docker installed, install it first. Refer to your choice of AI assistant for help. :robot:
 
+## Step 3 - Running the application
+Once you have Docker installed, you can get this environment up and running with:
 ```
-docker compose build app
 docker compose up -d
 ```
 
-You can browse the database with the following commands
+## Step 4 - Profit
+That's it! :+1:
 
+You can reach the application at `http://localhost:8000`. :shipit:
+
+# Testing the application
+
+## Database
+
+You can browse the database with the following commands:
 ```
 $ docker exec -it winampify-db mysql -u root -p
 Enter password: #provide root password from .env file
@@ -28,3 +39,7 @@ mysql> SELECT * FROM users;
 +----+-----------+------------------------+--------------------------------------------------------------+---------+
 2 rows in set (0.00 sec)
 ```
+
+## Web
+
+If you have *curl* installed, there are some example commands in the `test_curls.txt`

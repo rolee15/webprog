@@ -1,15 +1,15 @@
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `username` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `isAdmin` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE = InnoDB AUTO_INCREMENT = 12 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
-INSERT INTO `users` (id, name, email, password, isAdmin) VALUES
-  (12, 'John Doe', 'john@example.com', 'password123', 1),
-  (13, 'Jane Smith', 'jane@example.com', 'secret456', 0);
+INSERT INTO `users` (id, username, email, password, isAdmin) VALUES
+  (12, 'johndoe', 'john.doe@example.com', '$2y$12$X/k0UTvWsgrkoSqROurI7unIwdfa7tBgc4tgK12qbzrKMH/siAnSG', 1), -- pass: password123
+  (13, 'janesmith', 'jane.smith@example.com', '$2y$12$xbYF0i.gvhd0Zjx8E7z54.j/Wyr5mJ6uTp0Of3jJScexn4rdRrXFm', 0); -- pass: secret456
 
 DROP TABLE IF EXISTS `tracks`;
 CREATE TABLE `tracks` (

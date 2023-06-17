@@ -1,31 +1,29 @@
 <?php
 
 /* Host name of the MySQL server. */
-$host = 'localhost';
-/* MySQL account username. */
-$user = 'myUser';
-/* MySQL account password. */
-$passwd = 'myPasswd';
+$host = $_ENV['DB_HOST'];
+/* The port number of the MySQL server. */
+$port = $_ENV['DB_PORT'];
 /* The default schema you want to use. */
-$schema = 'mySchema';
+$schema = $_ENV['DB_DATABASE'];
+/* MySQL account username. */
+$user = $_ENV['DB_USERNAME'];
+/* MySQL account password. */
+$passwd = $_ENV['DB_PASSWORD'];
 /* The PDO object. */
 $pdo = NULL;
 /* Connection string, or "data source name". */
-$dsn = 'mysql:host=' . $host . ';dbname=' . $schema;
+$dsn = 'mysql:host=' . $host . ';port=' . $port . ';dbname=' . $schema;
+
 /* Connection inside a try/catch block. */
-try
-{
+try {
    /* PDO object creation. */
    $pdo = new PDO($dsn, $user,  $passwd);
 
    /* Enable exceptions on errors. */
    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-}
-catch (PDOException $e)
-{
+} catch (PDOException $e) {
    /* If there is an error, an exception is thrown. */
    echo 'Database connection failed.';
    die();
 }
-
-?>

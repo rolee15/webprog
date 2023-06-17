@@ -5,14 +5,15 @@ include 'pdo.php';
 /* Login status: false = not authenticated, true = authenticated. */
 $login = FALSE;
 /* Username from the login form. */
-$username = $_POST['username'];
+$username = $_GET['username'];
 /* Password from the login form. */
-$password = $_POST['password'];
+$password = $_GET['password'];
 /* Remember to validate $username and $password. */
 /* Look for the username in the database. */
-$query = 'SELECT * FROM accounts WHERE (account_name = :name)';
+$query = 'SELECT * FROM users WHERE (username = :username)';
 /* Values array for PDO. */
-$values = [':name' => $username];
+$values = [':username' => $username];
+
 /* Execute the query */
 try
 {
@@ -29,11 +30,11 @@ $row = $res->fetch(PDO::FETCH_ASSOC);
 /* If there is a result, check if the password matches using password_verify(). */
 if (is_array($row))
 {
-  if (password_verify($password, $row['account_passwd']))
+  if (password_verify($password, $row['password']))
   {
     /* The password is correct. */
     $login = TRUE;
   }
 }
 
-?>
+var_dump($login);

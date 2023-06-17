@@ -3,15 +3,25 @@
 /* Include the database connection script. */
 include 'pdo.php';
 /* Username. */
-$username = 'John';
+$username = $_POST['username'];
+/* Email. */
+$email = $_POST['email'];
 /* Password. */
-$password = 'my secret password';
+$password = $_POST['password'];
+/* Confirm password. */
+$confirmPassword = $_POST['confirm_password'];
+if (strcmp($password, $confirmPassword) !== 0) {
+  echo 'Password doesn\'t match.';
+  die();
+}
+/* Is admin? */
+$isAdmin = $_POST['is_admin'];
 /* Secure password hash. */
 $hash = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
 /* Insert query template. */
-$query = 'INSERT INTO accounts (account_name, account_passwd) VALUES (:name, :passwd)';
+$query = 'INSERT INTO users (username, email, password, isAdmin) VALUES (:username, :email, :password, :isAdmin)';
 /* Values array for PDO. */
-$values = [':name' => $username, ':passwd' => $hash];
+$values = [':username' => $username, ':email' => $email, ':password' => $hash, ':isAdmin' => $isAdmin];
 /* Execute the query. */
 try
 {
@@ -21,8 +31,10 @@ try
 catch (PDOException $e)
 {
   /* Query error. */
-  echo 'Query error.';
+  echo $e;
   die();
 }
+
+echo 'Success.';
 
 ?>

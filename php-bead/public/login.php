@@ -5,9 +5,9 @@ include 'pdo.php';
 /* Login status: false = not authenticated, true = authenticated. */
 $login = FALSE;
 /* Username from the login form. */
-$username = $_GET['username'];
+$username = $_POST['username'];
 /* Password from the login form. */
-$password = $_GET['password'];
+$password = $_POST['password'];
 /* Remember to validate $username and $password. */
 /* Look for the username in the database. */
 $query = 'SELECT * FROM users WHERE (username = :username)';
@@ -36,5 +36,3 @@ if (is_array($row))
     $login = TRUE;
   }
 }
-
-var_dump($login);

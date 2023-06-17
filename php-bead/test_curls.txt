@@ -1,3 +1,5 @@
+# Change superglobals from $_POST to $_GET in the php files to test them with these commands
+
 # Register new user
 curl "http://localhost:8000/addUser.php?username=admin&email=admin@example.com&password=admin&confirm_password=admin&is_admin=1" -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:98.0) Gecko/20100101 Firefox/98.0"
 

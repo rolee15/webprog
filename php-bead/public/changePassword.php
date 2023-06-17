@@ -1,11 +1,11 @@
 <?php
 
 /* Username. */
-$username = $_GET['username'];
+$username = $_POST['username'];
 /* New password. */
-$newPassword = $_GET['new_password'];
+$newPassword = $_POST['new_password'];
 /* Confirm password. */
-$confirmPassword = $_GET['confirm_password'];
+$confirmPassword = $_POST['confirm_password'];
 if (strcmp($newPassword, $confirmPassword) !== 0) {
   echo 'Password doesn\'t match.';
   die();

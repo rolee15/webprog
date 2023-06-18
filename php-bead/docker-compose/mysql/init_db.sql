@@ -40,6 +40,6 @@ CREATE TABLE playlists (
 ) ENGINE = InnoDB AUTO_INCREMENT = 12 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 INSERT INTO `playlists` (id, name, isPublic, createdBy, tracks) VALUES
   (12, 'My Favorites', 1, 12, '[12, 14]'),
-  (13, 'Rock Classics', 1, 14, '[13, 15]'),
+  (13, 'Rock Classics', 1, 13, '[13, 15]'),
   (14, 'Throwback Jams', 0, 12, '[12, 13, 14]');
 

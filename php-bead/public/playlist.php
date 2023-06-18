@@ -43,13 +43,20 @@ $tracks = $res->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Playlist - <?= $playlist['name'] ?></title>
+    <title>Winampify - <?= $playlist['name'] ?></title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <p><?= $playlist['isPublic'] ? 'Public' : 'Private' ?> playlist</p>
-    <h1><?= $playlist['name'] ?></h1>
-    <p style="font-weight: bold;"><?= $playlist['username'] ?></p>
+    <div id="topMenuBar">
+        <h1><a class="nostyle" href="/">Winampify</a></h1>
+    </div>
+
+    <span><?= $playlist['isPublic'] ? 'Public' : 'Private' ?> playlist</span>
+    <span>
+        <h1><?= $playlist['name'] ?></h1>
+    </span>
+    <span style="font-weight: bold;"><?= $playlist['username'] ?></span>
 
     <table>
         <tr>

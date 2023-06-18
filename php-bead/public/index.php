@@ -25,11 +25,14 @@ $publicPlaylists = $res->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Winampify</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <h1>Winampify</h1>
-    <quote>A web app to create and share playlists</quote>
+    <div id="topMenuBar">
+        <h1><a class="nostyle" href="/">Winampify</a></h1>
+        <span>A web app to create and share playlists</span>
+    </div>
 
     <div id="searchDiv">
         <input type="search" name="search" id="searchInput">

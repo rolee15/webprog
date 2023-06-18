@@ -2,7 +2,9 @@
 
 include 'pdo.php';
 
-$query = 'SELECT * FROM playlists WHERE (isPublic = :isPublic)';
+$query = 'SELECT p.id, p.name, u.username, p.tracks
+          FROM playlists AS p LEFT JOIN users AS u ON (p.createdBy = u.id)
+          WHERE (p.isPublic = :isPublic)';
 $values = [':isPublic' => 1];
 
 try {
@@ -27,7 +29,7 @@ $publicPlaylists = $res->fetchAll(PDO::FETCH_ASSOC);
 
 <body>
     <h1>Winampify</h1>
-    <h2>A web app to create and share playlists</h2>
+    <quote>A web app to create and share playlists</quote>
 
     <div id="searchDiv">
         <input type="search" name="search" id="searchInput">
@@ -35,15 +37,28 @@ $publicPlaylists = $res->fetchAll(PDO::FETCH_ASSOC);
     </div>
 
     <div id="publicPlaylists">
-        <ul>
+        <h2>Public playlists</h2>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Number of tracks</th>
+                <th>Created by</th>
+                <th>Link</th>
+            </tr>
             <?php
             foreach ($publicPlaylists as $playlist) {
-                echo '<li>';
-                echo $playlist['name'];
-                echo '</li>';
+                $tracks = json_decode($playlist['tracks']);
+                $link = '<a href="/playlist.php?id=' . $playlist['id'] . '">Link</a>';
+
+                echo '<tr>';
+                echo '<td>' . $playlist['name'] . '</td>';
+                echo '<td>' . count($tracks) . '</td>';
+                echo '<td>' . $playlist['username'] . '</td>';
+                echo '<td>' . $link . '</td>';
+                echo '</tr>';
             }
             ?>
-        </ul>
+        </table>
     </div>
 </body>
 

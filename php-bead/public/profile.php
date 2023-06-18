@@ -18,10 +18,6 @@ try {
 }
 
 $user = $res->fetch(PDO::FETCH_ASSOC);
-if (!is_array($user)) {
-    echo 'User doesn\'t exist.';
-    die();
-}
 
 ?>
 
@@ -50,7 +46,7 @@ if (!is_array($user)) {
         </div>
     </div>
 
-    <span>User <?= $user['username'] ?></span>
+    <?php if (isset($_SESSION['user'])) echo '<p>User ' . $user['username'] ?? '' . '</p>'; ?>
 </body>
 
 </html>

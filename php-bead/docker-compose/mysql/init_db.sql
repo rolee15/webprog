@@ -22,11 +22,11 @@ CREATE TABLE `tracks` (
   PRIMARY KEY (`id`)
 ) ENGINE = InnoDB AUTO_INCREMENT = 12 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 INSERT INTO tracks (id, title, artist, length, year, genres) VALUES
-  (12, 'Bohemian Rhapsody', 'Queen', '05:55', 1975, '["Rock", "Classic", "Progressive"]'),
-  (13, 'Thriller', 'Michael Jackson', '05:57', 1982, '["Pop"]'),
-  (14, 'Hotel California', 'Eagles', '06:30', 1976, '["Rock"]'),
-  (15, 'Hey Jude', 'The Beatles', '07:11', 1968, '["Rock"]'),
-  (16, 'Billie Jean', 'Michael Jackson', '04:54', 1982, '["Pop"]');
+  (12, 'Bohemian Rhapsody', 'Queen', '00:05:55', 1975, '["Rock", "Classic", "Progressive"]'),
+  (13, 'Thriller', 'Michael Jackson', '00:05:57', 1982, '["Pop"]'),
+  (14, 'Hotel California', 'Eagles', '00:06:30', 1976, '["Rock"]'),
+  (15, 'Hey Jude', 'The Beatles', '00:07:11', 1968, '["Rock"]'),
+  (16, 'Billie Jean', 'Michael Jackson', '00:04:54', 1982, '["Pop"]');
 
 DROP TABLE IF EXISTS `playlists`;
 CREATE TABLE playlists (

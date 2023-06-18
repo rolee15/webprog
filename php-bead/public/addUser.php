@@ -25,5 +25,3 @@ try {
   echo 'Query error';
   die();
 }
-
-echo 'Success.';

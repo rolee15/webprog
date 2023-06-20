@@ -34,7 +34,7 @@ A listában tegyél `[X]` jelet minden olyan feladat elé, amelyet legalább ré
 [ ] Saját listák: a bejelentkezett felhasználó hozzáadhat zeneszámokat a saját listáihoz (1 pont)
 [ ] Saját listák: a bejelentkezett felhasználó eltávolíthat zeneszámokat a saját listáiból (1 pont)
 [ ] Saját listák: a létrehozott lista lehet publikus vagy rejtett is, és ez megfelelően működik a listázásnál (1 pont)
-[ ] Admin funkció: be lehet jelentkezni az admin felhasználó adataival (0,5 pont)
+[X] Admin funkció: be lehet jelentkezni az admin felhasználó adataival (0,5 pont)
 [ ] Admin funkció: az admin (és CSAK az admin) létrehozhat új zeneszámokat (1 pont)
 [ ] Admin funkció: az admin (és CSAK az admin) módosíthat zeneszámokat (1 pont)
 [ ] Admin funkció: az admin (és CSAK az admin) törölhet zeneszámokat (1 pont)

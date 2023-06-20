@@ -2,11 +2,8 @@
 include 'session.php';
 include 'database.php';
 
-$link = $_SERVER['REQUEST_URI'] ?? '';
 $username = $_SESSION['user'] ?? '';
-
 $myPlaylists = $db->getUserPlaylists($username);
-
 ?>
 
 <!DOCTYPE html>
@@ -49,10 +46,7 @@ $myPlaylists = $db->getUserPlaylists($username);
         }
         echo '</table>
             </div>';
-    }
-    ?>
-
-    <?php if (!isset($_SESSION['user'])) echo '<p>Log in to see your profile page.</p>'; ?>
+    } else echo '<p>Log in to see your profile page.</p>'; ?>
 </body>
 
 </html>

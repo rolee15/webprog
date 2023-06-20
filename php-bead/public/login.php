@@ -11,7 +11,6 @@ if ($login) {
     $_SESSION['user'] = $username;
     header('Location: ' . $link);
 }
-
 ?>
 
 <!DOCTYPE html>

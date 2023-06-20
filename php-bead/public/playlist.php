@@ -2,13 +2,10 @@
 include 'session.php';
 include 'database.php';
 
-$link = $_SERVER['REQUEST_URI'];
 $id = $_GET['id'];
-
 $playlist = $db->getPlaylistById($id);
 $tracks = $db->getPlaylistTracks($playlist);
 $duration = $db->getPlaylistDuration($playlist);
-
 ?>
 
 <!DOCTYPE html>

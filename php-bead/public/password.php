@@ -1,30 +1,22 @@
 <?php
-session_start();
+include 'session.php';
+include 'database.php';
 
-$link = $_SERVER['REQUEST_URI'] ?? '';
-$username = $_SESSION['user'] ?? '';
 unset($_SESSION['error_message']);
+$username = $_SESSION['user'] ?? '';
+$oldPassword = $_POST['oldPassword'] ?? '';
+$newPassword = $_POST['newPassword'] ?? '';
+$confirmPassword = $_POST['confirmPassword'] ?? '';
 
-include 'pdo.php';
-
-$query = 'SELECT * FROM users WHERE (username = :username)';
-$values = [':username' => $username];
-
-try {
-    $res = $pdo->prepare($query);
-    $res->execute($values);
-} catch (PDOException $e) {
-    echo 'Query error.';
-    die();
+if (empty($newPassword) || strlen($newPassword) < 6) {
+    $_SESSION['error_message'] = 'New password must be at least 6 characters long.';
+} else if (strcmp($newPassword, $confirmPassword) !== 0) {
+    $_SESSION['error_message'] = "New password doesn't match.";
 }
 
-$user = $res->fetch(PDO::FETCH_ASSOC);
-if (!is_array($user)) {
-    $_SESSION['error_message'] = 'User not found.';
+if (!isset($_SESSION['error_message'])) {
+    $db->changePassword($username, $oldPassword, $newPassword);
 }
-
-include 'changePassword.php';
-
 ?>
 
 <!DOCTYPE html>
@@ -38,20 +30,7 @@ include 'changePassword.php';
 </head>
 
 <body>
-    <div id="topMenuBar">
-        <h1><a class="nostyle" href="/">Winampify</a></h1>
-        <div>
-            <?php
-            if (isset($_SESSION['user'])) {
-                echo '<span><a href="/profile.php" class="nostyle">' . $_SESSION['user'] . '</a></span>';
-                echo '<span><a href="/logout.php?redirect=' . $link . '" class="nostyle">Logout</a></span>';
-            } else {
-                echo '<span><a href="/login.php?redirect=' . $link . '" class="nostyle">Login</a></span>';
-            }
-            ?>
-        </div>
-    </div>
-
+    <? include 'components/topMenuBarComponent.php' ?>
 
     <?php
     if (isset($_SESSION['user'])) {

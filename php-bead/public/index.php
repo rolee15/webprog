@@ -2,10 +2,7 @@
 include 'session.php';
 include 'database.php';
 
-$link = $_SERVER['REQUEST_URI'];
-
 $publicPlaylists = $db->getPublicPlaylists();
-
 ?>
 
 <!DOCTYPE html>

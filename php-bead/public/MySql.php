@@ -29,14 +29,54 @@ class MySql
          die();
       }
 
-      $row = $res->fetch(PDO::FETCH_ASSOC);
-      if (is_array($row)) {
-         if (password_verify($password, $row['password'])) {
+      $user = $res->fetch(PDO::FETCH_ASSOC);
+      if (is_array($user)) {
+         if (password_verify($password, $user['password'])) {
             return true;
          }
       }
 
       return false;
+   }
+
+   function changePassword($username, $oldPassword, $newPassword)
+   {
+      $query = 'SELECT * FROM users WHERE (username = :username)';
+      $values = [':username' => $username];
+
+      try {
+         $res = $this->pdo->prepare($query);
+         $res->execute($values);
+      } catch (PDOException $e) {
+         echo 'Query error.';
+         die();
+      }
+
+      $user = $res->fetch(PDO::FETCH_ASSOC);
+      if (!is_array($user)) {
+         $_SESSION['error_message'] = 'User not found.';
+         return;
+      }
+      if (!password_verify($oldPassword, $user['password'])) {
+         $_SESSION['error_message'] = 'Old password is incorrect.';
+         return;
+      }
+
+      $hash = password_hash($newPassword, PASSWORD_BCRYPT, ['cost' => 12]);
+
+      $id = $user['id'];
+      $query = 'UPDATE users SET password = :password WHERE id = :id';
+      $values = [':password' => $hash, ':id' => $id];
+
+      try {
+         $res = $this->pdo->prepare($query);
+         $res->execute($values);
+      } catch (PDOException $e) {
+         echo 'Error during updating password.';
+         die();
+      }
+
+      return true;
    }
 
    function getPublicPlaylists()

@@ -2,9 +2,7 @@
 include 'session.php';
 include 'database.php';
 
-$link = $_SERVER['REQUEST_URI'] ?? '';
 $search = $_GET['search'] ?? '';
-
 $tracks = $db->searchTracks($search);
 ?>
 

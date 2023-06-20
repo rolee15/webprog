@@ -58,7 +58,3 @@ SELECT * FROM users;
 +----+-----------+------------------------+--------------------------------------------------------------+---------+
 2 rows in set (0.00 sec)
 ```
-
-## Web
-
-If you have *curl* installed, there are some example commands in the `test_curls.txt`

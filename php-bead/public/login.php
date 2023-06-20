@@ -1,8 +1,14 @@
 <?php
-session_start();
-$link = $_GET['redirect'];
-include 'loginUser.php';
-if (isset($_SESSION['user'])) {
+include 'session.php';
+include 'database.php';
+
+$username = $_POST['username'] ?? '';
+$password = $_POST['password'] ?? '';
+$link = $_GET['redirect'] ?? '/';
+
+$login = $db->login($username, $password);
+if ($login) {
+    $_SESSION['user'] = $username;
     header('Location: ' . $link);
 }
 
@@ -19,9 +25,7 @@ if (isset($_SESSION['user'])) {
 </head>
 
 <body>
-    <div id="topMenuBar">
-        <h1><a class="nostyle" href="/">Winampify</a></h1>
-    </div>
+    <? include 'components/titleComponent.php' ?>
 
     <form action="login.php?redirect=<?= $link ?>" method="post">
         <div>
@@ -35,7 +39,7 @@ if (isset($_SESSION['user'])) {
         <button type="submit">Login</button>
 
     </form>
-    <?php if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    <?php if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$login) {
         echo '<span style="color: red">Incorrect username or password!</span>';
     }
     ?>

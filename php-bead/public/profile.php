@@ -1,23 +1,11 @@
 <?php
-session_start();
+include 'session.php';
+include 'database.php';
 
 $link = $_SERVER['REQUEST_URI'] ?? '';
 $username = $_SESSION['user'] ?? '';
 
-include 'pdo.php';
-
-$query = 'SELECT * FROM users WHERE (username = :username)';
-$values = [':username' => $username];
-
-try {
-    $res = $pdo->prepare($query);
-    $res->execute($values);
-} catch (PDOException $e) {
-    echo 'Query error.';
-    die();
-}
-
-$user = $res->fetch(PDO::FETCH_ASSOC);
+$myPlaylists = $db->getUserPlaylists($username);
 
 ?>
 
@@ -32,23 +20,35 @@ $user = $res->fetch(PDO::FETCH_ASSOC);
 </head>
 
 <body>
-    <div id="topMenuBar">
-        <h1><a class="nostyle" href="/">Winampify</a></h1>
-        <div>
-            <?php
-            if (isset($_SESSION['user'])) {
-                echo '<span><a href="/profile.php" class="nostyle">' . $_SESSION['user'] . '</a></span>';
-                echo '<span><a href="/logout.php?redirect=' . $link . '" class="nostyle">Logout</a></span>';
-            } else {
-                echo '<span><a href="/login.php?redirect=' . $link . '" class="nostyle">Login</a></span>';
-            }
-            ?>
-        </div>
-    </div>
+    <? include 'components/topMenuBarComponent.php' ?>
 
     <?php if (isset($_SESSION['user'])) {
-        echo '<p>User ' . $user['username'] ?? '' . '</p>';
+        echo '<h2>User ' . $_SESSION['user'] . '</h2>';
         echo '<p><a href="/password.php">Change password</a></p>';
+
+        echo '<div id="myPlaylists">
+                <h2>My playlists</h2>
+                <table>
+                    <tr>
+                        <th>Name</th>
+                        <th>Number of tracks</th>
+                        <th>Visibility</th>
+                        <th>Link</th>
+                    </tr>';
+
+        foreach ($myPlaylists as $playlist) {
+            $tracks = json_decode($playlist['tracks']);
+            $link = '<a href="/playlist.php?id=' . $playlist['id'] . '">Link</a>';
+
+            echo '<tr>';
+            echo '<td>' . $playlist['name'] . '</td>';
+            echo '<td>' . count($tracks) . '</td>';
+            echo '<td>' . ($playlist['isPublic'] ? 'Public' : 'Private') . '</td>';
+            echo '<td>' . $link . '</td>';
+            echo '</tr>';
+        }
+        echo '</table>
+            </div>';
     }
     ?>
 

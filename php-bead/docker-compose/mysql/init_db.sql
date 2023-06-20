@@ -8,6 +8,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`)
 ) ENGINE = InnoDB AUTO_INCREMENT = 12 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 INSERT INTO `users` (id, username, email, password, isAdmin) VALUES
+  (1, 'admin', 'admin@winampify.com', '$2y$12$zNp8fDu10ZLAmutsdrDtGOVAN9b30owX1SAz3LE24wa5AwG4TVc02', 1), -- pass: admin
   (12, 'johndoe', 'john.doe@example.com', '$2y$12$X/k0UTvWsgrkoSqROurI7unIwdfa7tBgc4tgK12qbzrKMH/siAnSG', 1), -- pass: password123
   (13, 'janesmith', 'jane.smith@example.com', '$2y$12$xbYF0i.gvhd0Zjx8E7z54.j/Wyr5mJ6uTp0Of3jJScexn4rdRrXFm', 0); -- pass: secret456
 

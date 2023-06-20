@@ -19,7 +19,7 @@ A listában tegyél `[X]` jelet minden olyan feladat elé, amelyet legalább ré
 [X] Főoldal: megjelenik az összes publikus lejátszási lista neve (1 pont)
 [X] Főoldal: megjelenik az lejátszási listában található zeneszámok darabszáma és a listát létrehozó felhasználó neve is (1 pont)
 [X] Főoldal: egy lejátszási listára kattintva megjelenik az adott lejátszási lista részletező oldala (1 pont)
-[ ] Főoldal: a főoldalon egy keresőmezőbe írva megjelennek azok a számok, amelyek címe tartalmazza a beírt keresési szöveget (2 pont)
+[X] Főoldal: a főoldalon egy keresőmezőbe írva megjelennek azok a számok, amelyek címe tartalmazza a beírt keresési szöveget (2 pont)
 [X] Részletező oldal: egy lejátszási listára megjelennek a benne lévő zeneszámok adatai (2 pont)
 [X] Részletező oldal: a részletező oldal tetején látható, hogy mennyi a lejátszási lista teljes játékideje, vagyis a benne lévő számok hosszának összege (1 pont)
 

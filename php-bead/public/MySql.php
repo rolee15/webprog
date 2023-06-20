@@ -125,6 +125,22 @@ class MySql
       return $res->fetch(PDO::FETCH_ASSOC);
    }
 
+   function searchTracks($search)
+   {
+      $search = "'%" . $search . "%'";
+      $query = 'SELECT * FROM tracks WHERE title LIKE ' . $search;
+
+      try {
+         $res = $this->pdo->prepare($query);
+         $res->execute();
+      } catch (PDOException $e) {
+         echo $e;
+         die();
+      }
+
+      return $res->fetchAll(PDO::FETCH_ASSOC);
+   }
+
    private function tracksToCsv($tracks)
    {
       $trackIds = json_decode($tracks);

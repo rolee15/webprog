@@ -27,9 +27,9 @@ A listában tegyél `[X]` jelet minden olyan feladat elé, amelyet legalább ré
 
 [X] Bejelentkezés: hibás esetek kezelése (1 pont)
 [X] Bejelentkezés: sikeres bejelentkezés (1 pont)
-[ ] Regisztrációs űrlap: megfelelő elemeket tartalmazza (név, e-mail, jelszó, jelszó mégegyszer) (0,5 pont)
-[ ] Regisztrációs űrlap: hibás esetek kezelése, hibaüzenet, állapottartás (1,5 pont)
-[ ] Regisztrációs űrlap: sikeres regisztráció (0,5 pont)
+[X] Regisztrációs űrlap: megfelelő elemeket tartalmazza (név, e-mail, jelszó, jelszó mégegyszer) (0,5 pont)
+[X] Regisztrációs űrlap: hibás esetek kezelése, hibaüzenet, állapottartás (1,5 pont)
+[X] Regisztrációs űrlap: sikeres regisztráció (0,5 pont)
 [ ] Saját listák: a bejelentkezett felhasználó létre tud hozni saját lejátszási listát (1 pont)
 [ ] Saját listák: a bejelentkezett felhasználó hozzáadhat zeneszámokat a saját listáihoz (1 pont)
 [ ] Saját listák: a bejelentkezett felhasználó eltávolíthat zeneszámokat a saját listáiból (1 pont)

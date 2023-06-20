@@ -7,6 +7,7 @@ $username = $_SESSION['user'] ?? '';
 $oldPassword = $_POST['oldPassword'] ?? '';
 $newPassword = $_POST['newPassword'] ?? '';
 $confirmPassword = $_POST['confirmPassword'] ?? '';
+$justRegistered = $_GET['registerSuccess'] ?? '';
 
 if (empty($newPassword) || strlen($newPassword) < 6) {
     $_SESSION['error_message'] = 'New password must be at least 6 characters long.';
@@ -56,6 +57,8 @@ if (!isset($_SESSION['error_message'])) {
             } else {
                 echo '<span style="color: green">Password changed successfully.</span>';
             }
+        } else if ($_SERVER['REQUEST_METHOD'] === 'GET' && $justRegistered) {
+            echo '<span>Registration successful. Log in with your new credentials.</span>';
         }
     }
     ?>

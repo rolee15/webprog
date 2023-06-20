@@ -75,8 +75,22 @@ class MySql
          echo 'Error during updating password.';
          die();
       }
+   }
 
-      return true;
+   function register($username, $email, $password)
+   {
+      $hash = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
+
+      $query = 'INSERT INTO users (username, email, password, isAdmin) VALUES (:username, :email, :password, :isAdmin)';
+      $values = [':username' => $username, ':email' => $email, ':password' => $hash, ':isAdmin' => 0];
+
+      try {
+         $res = $this->pdo->prepare($query);
+         $res->execute($values);
+      } catch (PDOException $e) {
+         echo 'Query error';
+         die();
+      }
    }
 
    function getPublicPlaylists()

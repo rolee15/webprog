@@ -9,6 +9,9 @@ $link = $_GET['redirect'] ?? '/';
 $login = $db->login($username, $password);
 if ($login) {
     $_SESSION['user'] = $username;
+}
+
+if (isset($_SESSION['user'])) {
     header('Location: ' . $link);
 }
 ?>
@@ -25,6 +28,7 @@ if ($login) {
 
 <body>
     <? include 'components/titleComponent.php' ?>
+    <span><a class="nostyle" href="register.php">Register</a></span>
 
     <form action="login.php?redirect=<?= $link ?>" method="post">
         <div>

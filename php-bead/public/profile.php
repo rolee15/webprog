@@ -46,7 +46,13 @@ $user = $res->fetch(PDO::FETCH_ASSOC);
         </div>
     </div>
 
-    <?php if (isset($_SESSION['user'])) echo '<p>User ' . $user['username'] ?? '' . '</p>'; ?>
+    <?php if (isset($_SESSION['user'])) {
+        echo '<p>User ' . $user['username'] ?? '' . '</p>';
+        echo '<p><a href="/password.php">Change password</a></p>';
+    }
+    ?>
+
+    <?php if (!isset($_SESSION['user'])) echo '<p>Log in to see your profile page.</p>'; ?>
 </body>
 
 </html>

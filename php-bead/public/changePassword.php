@@ -1,43 +1,29 @@
 <?php
 
-$username = $_POST['username'];
-$newPassword = $_POST['new_password'];
-$confirmPassword = $_POST['confirm_password'];
+$username = $_SESSION['user'] ?? '';
+$oldPassword = $_POST['oldPassword'] ?? '';
+$newPassword = $_POST['newPassword'] ?? '';
+$confirmPassword = $_POST['confirmPassword'] ?? '';
 
-if (strcmp($newPassword, $confirmPassword) !== 0) {
-  echo 'Password doesn\'t match.';
-  die();
-}
+if (empty($newPassword) || strlen($newPassword) < 6) {
+  $_SESSION['error_message'] = 'New password must be at least 6 characters long.';
+} else if (!password_verify($oldPassword, $user['password'])) {
+  $_SESSION['error_message'] = 'Old password is incorrect.';
+} else if (strcmp($newPassword, $confirmPassword) !== 0) {
+  $_SESSION['error_message'] = "New password doesn't match.";
+} else {
 
-$hash = password_hash($newPassword, PASSWORD_BCRYPT, ['cost' => 12]);
+  $hash = password_hash($newPassword, PASSWORD_BCRYPT, ['cost' => 12]);
 
-include 'pdo.php';
+  $id = $user['id'];
+  $query = 'UPDATE users SET password = :password WHERE id = :id';
+  $values = [':password' => $hash, ':id' => $id];
 
-$query = 'SELECT * FROM users WHERE (username = :username)';
-$values = [':username' => $username];
-
-try {
-  $res = $pdo->prepare($query);
-  $res->execute($values);
-} catch (PDOException $e) {
-  echo 'Query error.';
-  die();
-}
-
-$row = $res->fetch(PDO::FETCH_ASSOC);
-if (!is_array($row)) {
-  echo 'User doesn\'t exist.';
-  die();
-}
-
-$id = $row['id'];
-$query = 'UPDATE users SET password = :password WHERE id = :id';
-$values = [':password' => $hash, ':id' => $id];
-
-try {
-  $res = $pdo->prepare($query);
-  $res->execute($values);
-} catch (PDOException $e) {
-  echo 'Query error.';
-  die();
+  try {
+    $res = $pdo->prepare($query);
+    $res->execute($values);
+  } catch (PDOException $e) {
+    echo 'Error during updating password.';
+    die();
+  }
 }
